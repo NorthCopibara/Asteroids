@@ -8,26 +8,39 @@ public class ControlSystem : MonoBehaviour
     [SerializeField] private PlayerView         _playerView;
     [SerializeField] private Transform          _playerSpawnPoint;
 
+    [SerializeField] private MainMenuView       _mainMenuView;
+
     private GameState _gameState = GameState.Start;
 
     private List<IUpdatable> _updatables = new List<IUpdatable>();
 
     private void Start()
     {
-        StartGame();
+        _mainMenuView.Init(StartGame);
     }
 
     public void StartGame()
     {
         InitPlayer();
-
-        _gameState = GameState.Game;
+        DisableMenu();
+        SetStateGame(GameState.Game);
     }
 
     private void InitPlayer() 
     {
         PlayerController playerController = new PlayerController(_playerData, _playerView, _playerSpawnPoint);
         _updatables.Add(playerController);
+    }
+
+    private void DisableMenu() 
+    {
+        _mainMenuView.Disable();
+        _mainMenuView.gameObject.SetActive(false);
+    }
+
+    private void SetStateGame(GameState state) 
+    {
+        _gameState = state;
     }
 
     private void Update()

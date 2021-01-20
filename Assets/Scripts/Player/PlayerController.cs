@@ -22,10 +22,10 @@ public class PlayerController : IUpdatable
                 _playerView.Rb.AddForce(_playerView.transform.up * _playerModel.EngineForce * Time.deltaTime);
                 break;
             case MoveDirection.Left:
-                _playerView.transform.Rotate(Vector3.forward + new Vector3(0, 0, _playerModel.SpeedRotation * Time.deltaTime));
+                _playerView.transform.Rotate(Vector3.forward, _playerModel.SpeedRotation * Time.deltaTime);
                 break;
             case MoveDirection.Right:
-                _playerView.transform.Rotate(-(Vector3.forward + new Vector3(0, 0, _playerModel.SpeedRotation * Time.deltaTime)));
+                _playerView.transform.Rotate(-Vector3.forward, _playerModel.SpeedRotation * Time.deltaTime);
                 break;
         }
     }
