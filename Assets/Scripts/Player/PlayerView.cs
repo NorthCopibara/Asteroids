@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerView : MonoBehaviour
 {
-    [SerializeField] private Rigidbody2D _rb;
-    [SerializeField] private GameObject _rocketFire;
+    [SerializeField] private Rigidbody2D    _rb;
+    [SerializeField] private GameObject     _rocketFire;
 
     private bool    _isMove;
     private Action  _gameOver;
@@ -19,14 +19,22 @@ public class PlayerView : MonoBehaviour
         _gameOver = gameOver;
     }
 
+    public void ResetView(Transform spawnPoint)
+    {
+        transform.position = spawnPoint.position;
+        transform.rotation = Quaternion.identity;
+        _rb.velocity = Vector2.zero;
+        _rb.angularVelocity = 0;
+    }
+
     public void MovePlayer(float force) 
     {
         _rb.AddForce(transform.up * force * Time.deltaTime);
     }
 
-    public void RotatePlayer(float speed, int diraction) 
+    public void RotatePlayer(float speed) 
     {
-        transform.Rotate(diraction * Vector3.forward, speed * Time.deltaTime);
+        transform.Rotate(Vector3.forward, speed * Time.deltaTime);
     }
 
     public void MovementAnimation(bool isMoving) 

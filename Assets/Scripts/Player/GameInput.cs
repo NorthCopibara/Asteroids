@@ -2,36 +2,18 @@
 
 public class GameInput
 {
-    public MoveDirection GetInputForMove() 
+    public bool GetInputForMove() 
     {
-        if (Input.GetKey(KeyCode.D)) 
-        {
-            return MoveDirection.Right;
-        }
+        return Input.GetKey(KeyCode.W);
+    }
 
-        if (Input.GetKey(KeyCode.A))
-        {
-            return MoveDirection.Left;
-        }
-
-        if (Input.GetKey(KeyCode.W))
-        {
-            return MoveDirection.Forward;
-        }
-
-        return MoveDirection.Idle;
+    public float GetRotation() 
+    {
+        return Input.GetAxis("Horizontal");
     }
 
     public bool GetInputForAttack() 
     {
         return Input.GetKey(KeyCode.Space);
     }
-}
-
-public enum MoveDirection 
-{
-    Idle,
-    Forward,
-    Left,
-    Right
 }

@@ -102,6 +102,8 @@ public static class PoolManager
             WarmPool(prefab, 1);
         }
 
+        SpawnView(prefab);
+
         var pool = _pools[prefab];
 
         var clone = pool.GetItem();
@@ -117,6 +119,15 @@ public static class PoolManager
         }
 
         return clone;
+    }
+
+    private static void SpawnView(GameObject prefab) 
+    {
+        var spawn = prefab.GetComponent<IPoolable>();
+        if (spawn != null) 
+        {
+            spawn.OnSpawn();
+        }
     }
 
     public static void ReleaseObject(GameObject clone)

@@ -26,8 +26,6 @@ public class AsteroidView : MonoBehaviour, IPoolable
 
     public void OnDespawn()
     {
-        _asteroidType = AsteroidsType.BigAsteroid;
-
         SpawnSmallAsteroids();
         PoolManager.SpawnObject(_destructionAsteroidView.gameObject, transform.position);
     }
@@ -38,7 +36,7 @@ public class AsteroidView : MonoBehaviour, IPoolable
         {
             if (_spawnSmallAsteroid != null) 
             {
-                _spawnSmallAsteroid.Invoke(gameObject.transform, _asteroidType + 1);
+                _spawnSmallAsteroid.Invoke(gameObject.transform, (AsteroidsType)((int)_asteroidType + 1));
             }
         }
     }

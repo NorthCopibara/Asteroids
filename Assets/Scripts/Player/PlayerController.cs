@@ -25,29 +25,24 @@ public class PlayerController : IUpdatable
 
     public void Reset(Transform spawnPoint) 
     {
-        _playerView.transform.position = spawnPoint.position;
-        _playerView.transform.rotation = Quaternion.identity;
+        _playerView.ResetView(spawnPoint);
     }
 
     private void MovePlayer() 
     {
-        bool isMoving = false;
+        bool isMoving = _gameInput.GetInputForMove();
 
-        switch (_gameInput.GetInputForMove()) 
+        if (isMoving)
         {
-            case MoveDirection.Forward:
-                _playerView.MovePlayer(_playerModel.EngineForce);
-                isMoving = true;
-                break;
-            case MoveDirection.Left:
-                _playerView.RotatePlayer(_playerModel.SpeedRotation, 1);
-                break;
-            case MoveDirection.Right:
-                _playerView.RotatePlayer(_playerModel.SpeedRotation, -1);
-                break;
+            _playerView.MovePlayer(_playerModel.EngineForce);
         }
 
         _playerView.MovementAnimation(isMoving);
+    }
+
+    private void RotatePlayer() 
+    {
+        _playerView.RotatePlayer(- _playerModel.SpeedRotation * _gameInput.GetRotation());
     }
 
     private void PlayerAttack() 
@@ -76,6 +71,7 @@ public class PlayerController : IUpdatable
     public void Update()
     {
         MovePlayer();
+        RotatePlayer();
         PlayerAttack();
         WaitingNewShot();
     }
