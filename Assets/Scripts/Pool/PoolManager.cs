@@ -125,13 +125,22 @@ public static class PoolManager
 
     public static void ReleaseObject(GameObject clone)
     {
-        clone.SetActive(false);
+        DespawnView(clone);
+        Despawn(clone);
+    }
 
+    private static void DespawnView(GameObject clone) 
+    {
         var despawn = clone.GetComponent<IPoolable>();
-        if (despawn != null) 
+        if (despawn != null)
         {
             despawn.OnDespawn();
         }
+    }
+
+    private static void Despawn(GameObject clone) 
+    {
+        clone.SetActive(false);
 
         if (_instanceLookup.ContainsKey(clone))
         {
@@ -149,6 +158,21 @@ public static class PoolManager
         }
     }
 
+    public static void ReleaseAllObject() 
+    {
+        List<GameObject> clones = new List<GameObject>();
+
+        foreach (var clone in _instanceLookup.Keys)
+        {
+            clones.Add(clone);
+            
+        }
+
+        foreach (var clone in clones)
+        {
+            Despawn(clone);
+        }
+    }
     #endregion
 }
 

@@ -4,25 +4,34 @@ using UnityEngine;
 
 public class ControlSystem : MonoBehaviour
 {
-    [SerializeField] private PlayerModel                _playerData;
-    [SerializeField] private PlayerView                 _playerView;
-    [SerializeField] private Transform                  _playerSpawnPoint;
+    [Header("Player")]
+    [SerializeField] private PlayerModel _playerData;
+    [SerializeField] private PlayerView _playerView;
+    [SerializeField] private Transform _playerSpawnPoint;
 
+    [Space]
     [SerializeField] private Transform                  _poolsParent;
 
+    [Space]
+    [Header("Bullet")]
     [SerializeField] private BulletView                 _bulletView;
     [SerializeField] private BulletModel                _bulletModel;
-    
+
+    [Space]
+    [Header("Asteroids")]
     [SerializeField] private AsteroidView               _asteroidView;
     [SerializeField] private DestructionAsteroidView    _destructionAsteroidView;
     [SerializeField] private AsteroidModel              _asteroidModel;
     [SerializeField] private SpawnerModel               _spawnerModel;
 
+    [Space]
+    [Header("GUI")]
     [SerializeField] private MainMenuView               _mainMenuView;
+    [SerializeField] private GameOverView               _gameOverView;
 
     private GameState _gameState = GameState.Start;
-
     private List<IUpdatable> _updatables = new List<IUpdatable>();
+    private PlayerController _playerController;
 
     private void Start()
     {
@@ -31,9 +40,33 @@ public class ControlSystem : MonoBehaviour
 
     public void StartGame()
     {
+        Time.timeScale = 1;
+
         InitPlayer();
         InitAsteroidsPool();
         DisableMenu();
+
+        SetStateGame(GameState.Game);
+    }
+
+    public void EndGame() 
+    {
+        Time.timeScale = 0;
+
+        _gameOverView.Init(RestartGame);
+        _gameOverView.gameObject.SetActive(true);
+        SetStateGame(GameState.End);
+    }
+
+    public void RestartGame() 
+    {
+        Time.timeScale = 1;
+
+        _gameOverView.gameObject.SetActive(false);
+        _playerController.Reset(_playerSpawnPoint);
+
+        PoolManager.ReleaseAllObject();
+
         SetStateGame(GameState.Game);
     }
 
@@ -41,9 +74,9 @@ public class ControlSystem : MonoBehaviour
     {
         var bulletPool = InitBulletPool();
 
-        PlayerController playerController = new PlayerController(_playerData, _playerView, _playerSpawnPoint, bulletPool);
+        _playerController = new PlayerController(_playerData, _playerView, _playerSpawnPoint, bulletPool, EndGame);
 
-        _updatables.Add(playerController);
+        _updatables.Add(_playerController);
     }
 
     private BulletsPool InitBulletPool() 
