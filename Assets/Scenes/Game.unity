@@ -140,7 +140,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &122632518
 RectTransform:
   m_ObjectHideFlags: 0
@@ -253,7 +253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &138545566
 RectTransform:
   m_ObjectHideFlags: 0
@@ -284,10 +284,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 138545565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7cd1efe180ef36a44b124da40f227c55, type: 3}
+  m_Script: {fileID: 11500000, guid: 72180e4176a4e6548ac191dc71797d59, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startGame: {fileID: 2073812235}
+  _restartGame: {fileID: 2073812235}
 --- !u!114 &138545568
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &552069345
 RectTransform:
   m_ObjectHideFlags: 0
@@ -981,7 +981,7 @@ MonoBehaviour:
   _playerData:
     EngineForce: 50
     SpeedRotation: 250
-    TimeBetweenShots: 0.4
+    TimeBetweenShots: 0.1
   _playerView: {fileID: 5360674117002715720, guid: e100febae6252b041a68a5b744e76925,
     type: 3}
   _playerSpawnPoint: {fileID: 705291992}
@@ -991,18 +991,21 @@ MonoBehaviour:
   _bulletModel:
     BulletsCountInPool: 20
     ShotForce: 10
-  _asteroidView: {fileID: 3108059380625183182, guid: 87db7b3ccf93a9347868b0849078ab68,
-    type: 3}
+  _asteroidsView:
+  - {fileID: 3108059380625183182, guid: 87db7b3ccf93a9347868b0849078ab68, type: 3}
+  - {fileID: 3108059380625183182, guid: 35c80c11f306ba94e8e8fe23d4e2071c, type: 3}
+  - {fileID: 3108059380625183182, guid: c84d8b8761d255b4ba833fd02a5c0cdf, type: 3}
   _destructionAsteroidView: {fileID: 4269735088608656333, guid: fe731a6e9a9aa4c42b82c2e52dd19011,
     type: 3}
   _asteroidModel:
     MiddleForce: 2
     ForceRange: 1
-    AngleRange: 40
     AsteroidsCountInPool: 20
   _spawnerModel:
     SpawnTimestamp: 1
+    MaxSmallAsteroidsCount: 2
   _mainMenuView: {fileID: 122632522}
+  _gameOverView: {fileID: 138545567}
 --- !u!4 &1656390199
 Transform:
   m_ObjectHideFlags: 0
@@ -1314,7 +1317,7 @@ GameObject:
   - component: {fileID: 2073812236}
   - component: {fileID: 2073812235}
   m_Layer: 5
-  m_Name: ButtonPlay
+  m_Name: ButtonRestart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

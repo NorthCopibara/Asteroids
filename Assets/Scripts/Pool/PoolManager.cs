@@ -30,10 +30,6 @@ public static class PoolManager
         {
             count = _pools[prefab].CountInQueue;
         }
-        else
-        {
-            Debug.LogWarning("No pool contains the object: " + prefab.name);
-        }
 
         return count;
     }
@@ -47,7 +43,7 @@ public static class PoolManager
     {
         foreach (KeyValuePair<GameObject, ObjectPool<GameObject>> keyVal in _pools)
         {
-            Debug.Log(string.Format("Object Pool for Prefab: {0} in queue {1}", keyVal.Key.name, keyVal.Value.CountInQueue));
+            //Debug.Log(string.Format("Object Pool for Prefab: {0} in queue {1}", keyVal.Key.name, keyVal.Value.CountInQueue));
         }
     }
 
@@ -151,10 +147,6 @@ public static class PoolManager
             {
                 PrintStatus();
             }
-        }
-        else
-        {
-            Debug.LogWarning("No pool contains the object: " + clone.name);
         }
     }
 

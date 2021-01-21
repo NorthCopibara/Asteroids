@@ -2,21 +2,28 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum AsteroidsType 
+{
+    BigAsteroid,
+    MiniAsteroid,
+    MicroAsteroid
+}
+
 public class AsteroidSpawner
 {
-    private AsteroidModel           _asteroidModel;
-    private AsteroidView            _asteroidView;
-    private DestructionAsteroidView _destructionAsteroidView;
-    private SpawnerModel            _spawnerModel;
-    private float                   _timeToSpawn;
-    private Camera                  _camera;
-    private List<Func<Vector2>>     _spawnZonesPosition = new List<Func<Vector2>>();
+    private AsteroidModel                           _asteroidModel;
+    private Dictionary<AsteroidsType, AsteroidView> _asteroidsView = new Dictionary<AsteroidsType, AsteroidView>();
+    private DestructionAsteroidView                 _destructionAsteroidView;
+    private SpawnerModel                            _spawnerModel;
+    private float                                   _timeToSpawn;
+    private Camera                                  _camera;
+    private List<Func<Vector2>>                     _spawnZonesPosition = new List<Func<Vector2>>();
 
-    public AsteroidSpawner(SpawnerModel spawnerModel, AsteroidModel asteroidModel, AsteroidView asteroidView,
+    public AsteroidSpawner(SpawnerModel spawnerModel, AsteroidModel asteroidModel, Dictionary<AsteroidsType, AsteroidView> asteroidsView,
                            DestructionAsteroidView destructionAsteroidView) 
     {
         _asteroidModel           = asteroidModel;
-        _asteroidView            = asteroidView;
+        _asteroidsView           = asteroidsView;
         _destructionAsteroidView = destructionAsteroidView;
         _spawnerModel            = spawnerModel;
         _camera                  = Camera.main;
@@ -40,18 +47,31 @@ public class AsteroidSpawner
 
     public void InitAsteroid()
     {
-        int firstZone = UnityEngine.Random.Range(0, 4);
-        int secondZone;
+        int firstZoneNumber = UnityEngine.Random.Range(0, 4);
+        int secondZoneNumber;
 
         do
         {
-            secondZone = UnityEngine.Random.Range(0, 4);
-        } while (firstZone == secondZone);
+            secondZoneNumber = UnityEngine.Random.Range(0, 4);
+        } while (firstZoneNumber == secondZoneNumber);
 
-        var firstSpawnPosition = _spawnZonesPosition[firstZone].Invoke();
-        var secondSpawnPosition = _spawnZonesPosition[secondZone].Invoke();
+        var firstSpawnPosition = _spawnZonesPosition[firstZoneNumber].Invoke();
+        var secondSpawnPosition = _spawnZonesPosition[secondZoneNumber].Invoke();
 
-        SpawnAstetoid(firstSpawnPosition, secondSpawnPosition);
+        SpawnAstetoid(firstSpawnPosition, secondSpawnPosition, AsteroidsType.BigAsteroid);
+    }
+
+    public void InitSmallAsteroids(Transform startPosition, AsteroidsType typeAsteroid) 
+    {
+        int asteroidsCount = UnityEngine.Random.Range(0, _spawnerModel.MaxSmallAsteroidsCount + 1);
+
+        for (int i = 0; i < asteroidsCount; i++)
+        {
+            int zoneNumber = UnityEngine.Random.Range(0, 4);
+            var spawnPosition = _spawnZonesPosition[zoneNumber].Invoke();
+
+            SpawnAstetoid(startPosition.position, spawnPosition, typeAsteroid);
+        }
     }
 
     private void InitSpawnZonesPosition()
@@ -98,10 +118,10 @@ public class AsteroidSpawner
         return new Vector2(spawnX, spawnY);
     }
 
-    private void SpawnAstetoid(Vector2 spawnPosition, Vector2 movePosition)
+    private void SpawnAstetoid(Vector2 spawnPosition, Vector2 movePosition, AsteroidsType asteroidsType)
     {
-        var asteroid = PoolManager.SpawnObject(_asteroidView.gameObject, spawnPosition, Quaternion.identity);
+        var asteroid = PoolManager.SpawnObject(_asteroidsView[asteroidsType].gameObject, spawnPosition, Quaternion.identity);
         var asteroidView = asteroid.GetComponent<AsteroidView>();
-        asteroidView.Init(_asteroidModel, movePosition, _destructionAsteroidView);
+        asteroidView.Init(_asteroidModel, movePosition, _destructionAsteroidView, asteroidsType, InitSmallAsteroids);
     }
 }

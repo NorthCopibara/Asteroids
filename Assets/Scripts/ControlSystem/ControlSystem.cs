@@ -5,9 +5,9 @@ using UnityEngine;
 public class ControlSystem : MonoBehaviour
 {
     [Header("Player")]
-    [SerializeField] private PlayerModel _playerData;
-    [SerializeField] private PlayerView _playerView;
-    [SerializeField] private Transform _playerSpawnPoint;
+    [SerializeField] private PlayerModel                _playerData;
+    [SerializeField] private PlayerView                 _playerView;
+    [SerializeField] private Transform                  _playerSpawnPoint;
 
     [Space]
     [SerializeField] private Transform                  _poolsParent;
@@ -19,7 +19,7 @@ public class ControlSystem : MonoBehaviour
 
     [Space]
     [Header("Asteroids")]
-    [SerializeField] private AsteroidView               _asteroidView;
+    [SerializeField] private List<AsteroidView>         _asteroidsView;
     [SerializeField] private DestructionAsteroidView    _destructionAsteroidView;
     [SerializeField] private AsteroidModel              _asteroidModel;
     [SerializeField] private SpawnerModel               _spawnerModel;
@@ -86,7 +86,7 @@ public class ControlSystem : MonoBehaviour
 
     private void InitAsteroidsPool() 
     {
-        var asteroidPool = new AsteroidsPool(_asteroidModel, _asteroidView, _poolsParent, _spawnerModel, _destructionAsteroidView);
+        var asteroidPool = new AsteroidsPool(_asteroidModel, _asteroidsView, _poolsParent, _spawnerModel, _destructionAsteroidView);
         _updatables.Add(asteroidPool);
     }
 
